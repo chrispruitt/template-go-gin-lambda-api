@@ -2,7 +2,7 @@ NAME=slack-bot
 FUNCTION_NAME=bot
 VERSION=latest
 DATE=`date +"%Y%m%d_%H%M%S"`
-TEST_JSON='{"path": "ping"}'
+TEST_JSON='{"path": "one"}'
 
 clean:
 	rm -rf dist
@@ -14,7 +14,6 @@ updateLambda: clean
 	aws lambda update-function-code --function-name ${FUNCTION_NAME} --zip-file fileb://${pwd}dist/main.zip
 
 invoke:
-	mkdir -p lambda_output
 	aws lambda invoke \
 		--function-name "${FUNCTION_NAME}" \
 		--log-type "Tail" \
