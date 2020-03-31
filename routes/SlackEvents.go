@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"regexp"
 	"slack-bot/bot"
 
@@ -13,7 +14,7 @@ import (
 	"github.com/slack-go/slack/slackevents"
 )
 
-var api = slack.New("xoxb-81721772995-1010795241714-mFw159SvGyM6aZ6xyVggikP7")
+var api = slack.New(os.Getenv("OAUTH_ACCESS_TOKEN"))
 
 func init() {
 	bot.InitBot(api)
@@ -39,7 +40,7 @@ func SlackEventHandler(c *gin.Context) {
 	body := buf.String()
 
 	// Verify the request came from slack
-	eventsAPIEvent, e := slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: "hpUebRLbHaqAcjZcv86aOUqL"}))
+	eventsAPIEvent, e := slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: os.Getenv("VERIFICATION_TOKEN")}))
 	if e != nil {
 		fmt.Println(e.Error())
 		c.JSON(http.StatusUnauthorized, gin.H{"error": e.Error()})
