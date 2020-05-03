@@ -42,7 +42,7 @@ func RegisterScript(script Script) {
 func HandleMentionEvent(event *slackevents.AppMentionEvent) {
 
 	// Strip @bot-name out
-	re := regexp.MustCompile(`<@.*> *`)
+	re := regexp.MustCompile(`^<@.*> *`)
 	event.Text = re.ReplaceAllString(event.Text, "")
 
 	for _, script := range scripts {
