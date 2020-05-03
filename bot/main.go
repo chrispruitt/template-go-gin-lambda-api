@@ -2,18 +2,15 @@ package bot
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
 )
 
-type Bot struct {
-	Scripts     []Script
-	SlackClient *slack.Client
-}
-
-var bot *Bot
+var SlackClient *slack.Client
+var scripts []Script
 
 type ScriptFunction func(*slackevents.AppMentionEvent)
 
@@ -25,10 +22,9 @@ type Script struct {
 	Function           ScriptFunction
 }
 
-func InitBot(slackClient *slack.Client) {
-	bot = &Bot{
-		SlackClient: slackClient,
-	}
+func init() {
+
+	SlackClient = slack.New(os.Getenv("OAUTH_ACCESS_TOKEN"))
 
 	RegisterScript(Script{
 		Name:               "Help",
@@ -40,7 +36,7 @@ func InitBot(slackClient *slack.Client) {
 }
 
 func RegisterScript(script Script) {
-	bot.Scripts = append(bot.Scripts, script)
+	scripts = append(scripts, script)
 }
 
 func HandleMentionEvent(event *slackevents.AppMentionEvent) {
@@ -49,14 +45,14 @@ func HandleMentionEvent(event *slackevents.AppMentionEvent) {
 	re := regexp.MustCompile(`<@.*> *`)
 	event.Text = re.ReplaceAllString(event.Text, "")
 
-	for _, script := range bot.Scripts {
+	for _, script := range scripts {
 		if match(script.Matcher, event.Text) {
 			script.Function(event)
 			return
 		}
 	}
 
-	bot.SlackClient.PostMessage(event.Channel, slack.MsgOptionText("Sorry, I don't know that command.", false))
+	SlackClient.PostMessage(event.Channel, slack.MsgOptionText("Sorry, I don't know that command.", false))
 
 }
 
@@ -67,7 +63,7 @@ func match(matcher string, content string) bool {
 
 func helpScriptFunc(event *slackevents.AppMentionEvent) {
 	helpMsg := "Prefix @bo to any command you would like to execute. \n\n"
-	for i, script := range bot.Scripts {
+	for i, script := range scripts {
 		if i != 0 {
 			helpMsg += "\n"
 		}
@@ -80,5 +76,5 @@ func helpScriptFunc(event *slackevents.AppMentionEvent) {
 			helpMsg += fmt.Sprintf("Missing help command description for %s", script.Name)
 		}
 	}
-	bot.SlackClient.PostMessage(event.Channel, slack.MsgOptionText(fmt.Sprintf("```%s```", helpMsg), false))
+	SlackClient.PostMessage(event.Channel, slack.MsgOptionText(fmt.Sprintf("```%s```", helpMsg), false))
 }

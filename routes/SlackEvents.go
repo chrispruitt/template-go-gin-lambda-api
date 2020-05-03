@@ -6,32 +6,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"regexp"
 	"slack-bot/bot"
 
 	"github.com/gin-gonic/gin"
-	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
 )
-
-var api = slack.New(os.Getenv("OAUTH_ACCESS_TOKEN"))
-
-func init() {
-	bot.InitBot(api)
-
-	bot.RegisterScript(bot.Script{
-		Name:               "Echo",
-		Matcher:            "(?i)^echo.*",
-		Description:        "Echo a message",
-		CommandDescription: "echo <message>",
-		Function: func(event *slackevents.AppMentionEvent) {
-			re := regexp.MustCompile(`echo *`)
-			text := re.ReplaceAllString(event.Text, "")
-
-			api.PostMessage(event.Channel, slack.MsgOptionText(fmt.Sprintf("You said, \"%s\"", text), false))
-		},
-	})
-}
 
 func SlackEventHandler(c *gin.Context) {
 

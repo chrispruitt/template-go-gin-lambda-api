@@ -14,6 +14,8 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
+
+	_ "slack-bot/scripts"
 )
 
 var ginLambda *ginadapter.GinLambda
@@ -77,7 +79,7 @@ func (handler CustomHandle) Invoke(ctx context.Context, payload []byte) ([]byte,
 	var pollEvent bot.PollEvent
 	json.Unmarshal(payload, &pollEvent)
 
-	if PpllEvent.Name != "" {
+	if pollEvent.Name != "" {
 		fmt.Println("Received a Poll Request Event.")
 
 		response, err := PollEventHandler(ctx, pollEvent)
