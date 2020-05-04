@@ -1,8 +1,9 @@
 package main
 
 import (
-	"slack-bot/bot"
-	_ "slack-bot/scripts"
+	"github.com/chrispruitt/ssbot/bot"
+
+	_ "github.com/chrispruitt/ssbot/scripts"
 )
 
 func main() {

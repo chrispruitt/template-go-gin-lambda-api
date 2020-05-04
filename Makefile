@@ -1,4 +1,4 @@
-NAME=slack-bot
+NAME=ssbot
 FUNCTION_NAME=bot
 VERSION=latest
 DATE=`date +"%Y%m%d_%H%M%S"`
@@ -22,7 +22,7 @@ invoke:
 		output/$(DATE).log \
 		| jq -r '.LogResult' | base64 -D
 
-startStepFunctionExecution:
+invokeStepFunctionExecution:
 	aws stepfunctions start-execution \
 		--state-machine-arn arn:aws:states:us-east-1:770171891064:stateMachine:TriggerLambdaBot \
 		--input $(STEP_FUNCTION_JSON)

@@ -36,7 +36,7 @@ func SlackEventHandler(c *gin.Context) {
 	body := buf.String()
 
 	// Verify the request came from slack
-	eventsAPIEvent, e := slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: os.Getenv("VERIFICATION_TOKEN")}))
+	eventsAPIEvent, e := slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: os.Getenv("SLACK_VERIFICATION_TOKEN")}))
 	if e != nil {
 		fmt.Println(e.Error())
 		c.JSON(http.StatusUnauthorized, gin.H{"error": e.Error()})

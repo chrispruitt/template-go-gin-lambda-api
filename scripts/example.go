@@ -3,7 +3,8 @@ package scripts
 import (
 	"fmt"
 	"regexp"
-	"slack-bot/bot"
+
+	"github.com/chrispruitt/ssbot/bot"
 
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"

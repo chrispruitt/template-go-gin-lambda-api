@@ -24,7 +24,7 @@ type Script struct {
 
 func init() {
 
-	SlackClient = slack.New(os.Getenv("OAUTH_ACCESS_TOKEN"))
+	SlackClient = slack.New(os.Getenv("SLACK_OAUTH_ACCESS_TOKEN"))
 
 	RegisterScript(Script{
 		Name:               "Help",

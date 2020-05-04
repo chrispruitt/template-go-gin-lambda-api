@@ -1,6 +1,8 @@
-module slack-bot
+module github.com/chrispruitt/ssbot
 
 go 1.13
+
+replace github.com/chrispruitt/ssbot/bot => ./bot
 
 require (
 	github.com/aws/aws-lambda-go v1.16.0
